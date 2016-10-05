@@ -6,7 +6,7 @@ public class CameraMove : MonoBehaviour
     public float rotSpeed = 100f;
     public GameObject player = null;
     Vector3 oriPos = Vector3.zero;
-    private Transform tr;
+    public Transform tr;
     // Use this for initialization
     void Start ()
     {
