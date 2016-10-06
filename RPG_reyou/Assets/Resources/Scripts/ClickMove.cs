@@ -3,18 +3,37 @@ using System.Collections;
 
 public class ClickMove : MonoBehaviour
 {
+    public float jump = 3f;
+    public bool isground = false;
     public float speed;
+    public float rotSpeed = 150f;
     private Vector3 newPosition;
+    private Transform tr;
+    // private NavMeshAgent navi = null;
     // Use this for initialization
     void Start ()
     {
+        tr = GetComponent<Transform>();
         newPosition = transform.position;
-
     }
 
     // Update is called once per frame
     void Update ()
     {
+        tr.Rotate(Vector3.up * Time.deltaTime * rotSpeed * Input.GetAxis("Mouse X") * 1.5f);
+        //navi.SetDestination(newPosition);
+        if (isground == true)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                //바닥에 붙어 있는 상태에서 점프키가 눌렸다면 점프상태로 처리한다.
+                Rigidbody r = (Rigidbody)GetComponent(typeof(Rigidbody));
+                r.velocity = Vector3.up * jump;
+
+                isground = false;
+            }
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             //RaycastHit hit;
@@ -53,6 +72,13 @@ public class ClickMove : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, newRot, Time.deltaTime * 10);
             // this.transform.Translate(transform.forward * speed * Time.deltaTime);
             transform.position = Vector3.MoveTowards(transform.position, newPosition, speed * Time.deltaTime);
+        }
+    }
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.collider.tag == "Ground")
+        {
+            isground = true;
         }
     }
 }
