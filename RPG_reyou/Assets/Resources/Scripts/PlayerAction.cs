@@ -18,6 +18,7 @@ public class PlayerAction : MonoBehaviour
     public bool isground = false;
     private Transform tr;
     private Animator animator = null;
+    private Quaternion toRotation;
     // Use this for initialization
     void Start()
     {
@@ -44,14 +45,18 @@ public class PlayerAction : MonoBehaviour
         //    this.transform.Translate(Vector3.forward * MoveSpeed * Time.deltaTime);
 
         //}
-        float yy = Input.GetAxis("Horizontal");
-        float xx = Input.GetAxis("Vertical");
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
 
-        Vector3 movedir = (Vector3.back * xx) + (Vector3.left * yy);
+        //Vector3 movedir = (Vector3.back * v) + (Vector3.left * h);
 
-        tr.Translate(movedir.normalized * Time.deltaTime * MoveSpeed, Space.World);
+        // tr.Translate(movedir.normalized * Time.deltaTime * MoveSpeed, Space.World);
+        this.transform.Translate(Vector3.right * h * MoveSpeed * Time.deltaTime);
+        this.transform.Translate(Vector3.forward * v * MoveSpeed * Time.deltaTime);
 
-        tr.Rotate(Vector3.up * Time.deltaTime * rotSpeed * Input.GetAxis("Mouse X"));
+        lookDirection = v * Vector3.back + h * Vector3.left;
+
+        //tr.Rotate(Vector3.up * Time.deltaTime * rotSpeed * Input.GetAxis("Mouse X"));
 
         if (isground == true)
         {
@@ -64,6 +69,20 @@ public class PlayerAction : MonoBehaviour
                 isground = false;
             }
         }
+
+        if(h >= 0.1f)
+        {
+            this.transform.rotation = Quaternion.LookRotation(lookDirection);
+        }
+        else if(h <= -0.1f)
+        {
+            this.transform.rotation = Quaternion.LookRotation(lookDirection);
+        }
+        else if(v <= -0.1f)
+        {
+            this.transform.rotation = Quaternion.LookRotation(lookDirection);
+        }
+
     }
 
     void OnCollisionEnter(Collision col)
