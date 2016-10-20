@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MonsterAction : MonoBehaviour
 {
@@ -8,20 +9,21 @@ public class MonsterAction : MonoBehaviour
     public float maxHP = 0f;
     public int statAttack = 0;          // 공격력
     public float speed = 5f;
-    public GameObject player;
+    public Transform tr;
+    
     // Use this for initialization
     void Start ()
     {
-        player = player.GetComponentInChildren<GameObject>();
+        tr = GetComponent<Transform>();
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-	
+	    
 	}
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
         if(col.gameObject.name == "asbow")
         {
